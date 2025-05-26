@@ -12,6 +12,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>pronto_core</build_depend>
   <build_depend>roscpp</build_depend>
+  <build_depend>tf2_eigen</build_depend>
   <build_export_depend>pronto_core</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <exec_depend>pronto_core</exec_depend>

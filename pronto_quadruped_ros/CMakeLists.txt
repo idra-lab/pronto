@@ -13,12 +13,14 @@ find_package(catkin REQUIRED COMPONENTS roscpp
                                         sensor_msgs
                                         pronto_msgs
                                         visualization_msgs
+                                        tf2_eigen
                                         eigen_conversions)
 
 catkin_package(INCLUDE_DIRS include
                LIBRARIES ${PROJECT_NAME}
                CATKIN_DEPENDS pronto_core
                               pronto_quadruped
+                              roscpp
                               geometry_msgs
                               sensor_msgs
                               pronto_msgs
