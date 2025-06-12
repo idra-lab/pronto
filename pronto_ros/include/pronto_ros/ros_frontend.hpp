@@ -7,6 +7,7 @@
 #include <sensor_msgs/Imu.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/TwistWithCovarianceStamped.h>
+#include <nav_msgs/Odometry.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <tf_conversions/tf_eigen.h>
 #include <chrono>
@@ -131,12 +132,14 @@ private:
 
     ros::Publisher pose_pub_;
     ros::Publisher twist_pub_;
+    ros::Publisher odom_pub_;
     tf2_ros::TransformBroadcaster tf2_broadcaster_;
     geometry_msgs::TransformStamped transform_msg_;
     bool publish_tf_ = false;
 
     geometry_msgs::PoseWithCovarianceStamped pose_msg_;
     geometry_msgs::TwistWithCovarianceStamped twist_msg_;
+    nav_msgs::Odometry odom_msg_;
 
     nav_msgs::Path aicp_path;
     ros::Publisher aicp_path_publisher;
@@ -391,7 +394,13 @@ if(sensor_id.compare("scan_matcher") == 0){
             tf::quaternionTFToMsg(temp_q,pose_msg_.pose.pose.orientation);
 
             // fill in time
-            pose_msg_.header.stamp = ros::Time().fromNSec(head_state.utime * 1000);
+            pose_msg_.header.stamp = twist_msg_.header.stamp;
+
+            odom_msg_.header.stamp = twist_msg_.header.stamp;
+            odom_msg_.pose = pose_msg_.pose;
+            odom_msg_.twist = twist_msg_.twist;
+            odom_pub_.publish(odom_msg_);
+
             if(publish_tf_){
                 // Only publish the pose if the timestamp is different:
                 // This prevents issues in Noetic where repeated warnings of type:

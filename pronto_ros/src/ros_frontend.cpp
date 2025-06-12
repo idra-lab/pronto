@@ -29,6 +29,18 @@ ROSFrontEnd::ROSFrontEnd(ros::NodeHandle& nh, bool verbose) :
                 twist_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>(twist_topic, 200);
                 twist_msg_.header.frame_id = twist_frame_id;
             }
+            std::string odom_topic = "odom";
+            if(nh_.getParam("odom_topic", odom_topic)){
+                odom_pub_ = nh_.advertise<nav_msgs::Odometry>(odom_topic, 200);
+                // frame_id is the same as pose's frame_id,
+                // child_frame_id is the same as twist's frame_id
+                // as per definition of the odometry message
+                // https://docs.ros.org/en/noetic/api/nav_msgs/html/msg/Odometry.html
+                odom_msg_.header.frame_id = pose_frame_id;
+                odom_msg_.child_frame_id = twist_frame_id;
+            } else {
+                ROS_WARN_STREAM("Couldn't get param \"odom_topic\". Not publishing odom.");
+            }
             // try to
             if(!nh_.getParam("publish_tf", publish_tf_)){
                 ROS_WARN("Couldn't get param \"publish_tf\". Not publishing TF.");
