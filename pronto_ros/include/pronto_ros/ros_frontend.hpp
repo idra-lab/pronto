@@ -398,11 +398,12 @@ if(sensor_id.compare("scan_matcher") == 0){
 
             // fill in odometry from the pose and twist, same timestamp as for twist
             odom_msg_.header.stamp = twist_msg_.header.stamp;
-            // frames are already filled in at initialization, 
+            // frames are already filled in at initialization,
 
             odom_msg_.pose = pose_msg_.pose;
             odom_msg_.twist = twist_msg_.twist;
             odom_pub_.publish(odom_msg_);
+
 
             if(publish_tf_){
                 // Only publish the pose if the timestamp is different:
@@ -410,13 +411,13 @@ if(sensor_id.compare("scan_matcher") == 0){
                 // "TF_REPEATED_DATA ignoring data with redundant timestamp for frame base at time"
                 // are otherwise printed to the terminal.
                 // Cf. https://github.com/ros/geometry2/issues/467#issuecomment-751572836
-                ros::Time new_stamp = pose_msg_.header.stamp;
-                if (new_stamp > transform_msg_.header.stamp) {
+                //ros::Time new_stamp = pose_msg_.header.stamp;
+                if (pose_msg_.header.stamp != transform_msg_.header.stamp) {
                     transform_msg_.transform.translation.x = pose_msg_.pose.pose.position.x;
                     transform_msg_.transform.translation.y = pose_msg_.pose.pose.position.y;
                     transform_msg_.transform.translation.z = pose_msg_.pose.pose.position.z;
                     transform_msg_.transform.rotation = pose_msg_.pose.pose.orientation;
-                    transform_msg_.header.stamp = new_stamp;
+                    transform_msg_.header.stamp = pose_msg_.header.stamp;
                     tf2_broadcaster_.sendTransform(transform_msg_);
                 } else {
                     ROS_WARN_STREAM("Not publishing transform for " << sensor_id
@@ -444,7 +445,7 @@ if(sensor_id.compare("scan_matcher") == 0){
 template <class PrimaryMsgT, class SecondaryMsgT>
 void ROSFrontEnd::secondaryCallback(boost::shared_ptr<SecondaryMsgT const> msg,
                                     const SensorId& sensor_id)
-{    
+{
     auto a = dynamic_cast<DualSensingModule<PrimaryMsgT,SecondaryMsgT>*>(static_cast<SensingModule<PrimaryMsgT>*>(active_modules_[sensor_id]));
     a->processSecondaryMessage(*msg);
 }
