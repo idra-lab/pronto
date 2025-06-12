@@ -393,10 +393,13 @@ if(sensor_id.compare("scan_matcher") == 0){
             tf::quaternionEigenToTF(head_state.orientation(), temp_q);
             tf::quaternionTFToMsg(temp_q,pose_msg_.pose.pose.orientation);
 
-            // fill in time
+            // fill in time for pose, it's the same as for twist
             pose_msg_.header.stamp = twist_msg_.header.stamp;
 
+            // fill in odometry from the pose and twist, same timestamp as for twist
             odom_msg_.header.stamp = twist_msg_.header.stamp;
+            // frames are already filled in at initialization, 
+
             odom_msg_.pose = pose_msg_.pose;
             odom_msg_.twist = twist_msg_.twist;
             odom_pub_.publish(odom_msg_);
@@ -415,6 +418,10 @@ if(sensor_id.compare("scan_matcher") == 0){
                     transform_msg_.transform.rotation = pose_msg_.pose.pose.orientation;
                     transform_msg_.header.stamp = new_stamp;
                     tf2_broadcaster_.sendTransform(transform_msg_);
+                } else {
+                    ROS_WARN_STREAM("Not publishing transform for " << sensor_id
+                                    << " because the timestamp is not newer than the last one: "
+                                    << new_stamp << " <= " << transform_msg_.header.stamp);
                 }
             }
 
