@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(pronto_quadruped_ros)
 
-set(CMAKE_CXX_STANDARD 14)
 
 add_compile_options(-Wall)
 
