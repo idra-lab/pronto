@@ -38,7 +38,7 @@ ROSFrontEnd::ROSFrontEnd(ros::NodeHandle& nh, bool verbose) :
                 // https://docs.ros.org/en/noetic/api/nav_msgs/html/msg/Odometry.html
                 odom_msg_.header.frame_id = pose_frame_id;
                 odom_msg_.child_frame_id = twist_frame_id;
-                ROS_INFO_STREAM("Publishing odom with frame_id: \"" << odom_msg_.header.frame_id << "\" and child_frame_id: \"" << odom_msg_.child_frame_id << "\"");
+                ROS_INFO_STREAM("Publishing odometry msg with frame_id: \"" << odom_msg_.header.frame_id << "\" and child_frame_id: \"" << odom_msg_.child_frame_id << "\"");
             } else {
                 ROS_WARN_STREAM("Couldn't get param \"odom_topic\". Not publishing odom.");
             }

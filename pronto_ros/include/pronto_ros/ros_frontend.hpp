@@ -402,13 +402,7 @@ if(sensor_id.compare("scan_matcher") == 0){
 
             odom_msg_.pose = pose_msg_.pose;
             odom_msg_.twist = twist_msg_.twist;
-            ROS_INFO_STREAM("Publishing odom with frame_id: \"" << odom_msg_.header.frame_id
-                                << "\" and child_frame_id: \"" << odom_msg_.child_frame_id << "\"");
             odom_pub_.publish(odom_msg_);
-            ROS_INFO_STREAM("After Publishing odom with frame_id: \"" << odom_msg_.header.frame_id
-                                << "\" and child_frame_id: \"" << odom_msg_.child_frame_id << "\"");
-
-
 
             if(publish_tf_){
                 // Only publish the pose if the timestamp is different:
@@ -424,18 +418,8 @@ if(sensor_id.compare("scan_matcher") == 0){
                     transform_msg_.transform.rotation = pose_msg_.pose.pose.orientation;
                     transform_msg_.header.stamp = pose_msg_.header.stamp;
                     tf2_broadcaster_.sendTransform(transform_msg_);
-                    ROS_INFO_STREAM("Publishing transform for " << sensor_id
-                                    << " with timestamp: " << pose_msg_.header.stamp);
-                } else {
-                    ROS_WARN_STREAM("Not publishing transform for " << sensor_id
-                                    << " because the timestamp is not newer than the last one: "
-                                    << pose_msg_.header.stamp << " <= " << transform_msg_.header.stamp);
                 }
-            } else {
-                ROS_WARN_STREAM("Not publishing transform for " << sensor_id
-                                << " because publish_tf_ is set to false.");
             }
-
             // TODO insert appropriate covariance into the message
             // publish the pose
             pose_pub_.publish(pose_msg_);
