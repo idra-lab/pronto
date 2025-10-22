@@ -78,7 +78,7 @@ RBISUpdateInterface* ImuBiasLock::processMessage(const ImuMeasurement *msg,
   if(!do_record_ && !gyro_bias_history_.empty()) {
     if(gyro_bias_history_.size() < min_size)
     {
-      std::cerr << "Cleaning too short history " << gyro_bias_history_.size() << " < " << min_size << std::endl;
+      //std::cerr << "Cleaning too short history " << gyro_bias_history_.size() << " < " << min_size << std::endl;
       gyro_bias_history_.clear();
       accel_bias_history_.clear();
       return nullptr;
