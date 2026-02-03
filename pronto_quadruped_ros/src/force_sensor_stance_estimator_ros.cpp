@@ -13,9 +13,18 @@ ForceSensorStanceEstimatorROS::ForceSensorStanceEstimatorROS(ros::NodeHandle &nh
 {
   // get parameters for the leg odometry
   std::string legodo_prefix = "legodo/";
-  double stance_threshold;
-  nh.getParam(legodo_prefix + "stance_threshold", stance_threshold);
-  force_threshold_ = stance_threshold;
+  //double stance_threshold;
+  nh.getParam(legodo_prefix + "lf_stance_threshold", leg_thresholds_[LF]);
+  nh.getParam(legodo_prefix + "rf_stance_threshold", leg_thresholds_[RF]);
+  nh.getParam(legodo_prefix + "lh_stance_threshold", leg_thresholds_[LH]);
+  nh.getParam(legodo_prefix + "rh_stance_threshold", leg_thresholds_[RH]);
+
+  nh.getParam(legodo_prefix + "lf_sensor_offset", leg_sensor_offsets_[LF]);
+  nh.getParam(legodo_prefix + "rf_sensor_offset", leg_sensor_offsets_[RF]);
+  nh.getParam(legodo_prefix + "lh_sensor_offset", leg_sensor_offsets_[LH]);
+  nh.getParam(legodo_prefix + "rh_sensor_offset", leg_sensor_offsets_[RH]);
+
+  //force_threshold_ = stance_threshold;
   ROS_INFO_STREAM("[ForceSensorStanceEstimator] Stance threshold: " << force_threshold_);
 }
 

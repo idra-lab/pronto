@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(pronto_ros)
 
 add_compile_options(-Wall)
-
+set(CMAKE_BUILD_TYPE "Release")
 find_package(catkin REQUIRED COMPONENTS pronto_core
                                         roscpp
                                         sensor_msgs

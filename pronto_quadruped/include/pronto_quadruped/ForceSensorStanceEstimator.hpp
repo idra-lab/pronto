@@ -24,6 +24,9 @@ public:
 protected:
   LegBoolMap stance_;
   LegVectorMap grf_;
+  LegDataMap<int> leg_sensor_offsets_;
+  LegDataMap<int> leg_thresholds_;
+
   double force_threshold_;
 };
 
