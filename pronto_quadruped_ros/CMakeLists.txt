@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(pronto_quadruped_ros)
 
-
+set(CMAKE_BUILD_TYPE "Release")
 add_compile_options(-Wall)
 
 find_package(catkin REQUIRED COMPONENTS roscpp

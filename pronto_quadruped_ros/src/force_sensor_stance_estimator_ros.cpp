@@ -25,7 +25,15 @@ ForceSensorStanceEstimatorROS::ForceSensorStanceEstimatorROS(ros::NodeHandle &nh
   nh.getParam(legodo_prefix + "rh_sensor_offset", leg_sensor_offsets_[RH]);
 
   //force_threshold_ = stance_threshold;
-  ROS_INFO_STREAM("[ForceSensorStanceEstimator] Stance threshold: " << force_threshold_);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] LF stance threshold: " << leg_thresholds_[LF]);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] RF stance threshold: " << leg_thresholds_[RF]);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] LH stance threshold: " << leg_thresholds_[LH]);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] RH stance threshold: " << leg_thresholds_[RH]);
+  ROS_INFO_STREAM(" ----------------------------------------------------------- ");
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] LF sensor offset: " << leg_sensor_offsets_[LF]);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] RF sensor offset: " << leg_sensor_offsets_[RF]);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] LH sensor offset: " << leg_sensor_offsets_[LH]);
+  ROS_INFO_STREAM("[ForceSensorStanceEstimator] RH sensor offset: " << leg_sensor_offsets_[RH]);
 }
 
 }  // namespace quadruped

@@ -4,7 +4,7 @@ project(pronto_quadruped)
 set(CMAKE_CXX_STANDARD 14)
 add_compile_options(-Wall)
 
-set(DEFAULT_BUILD "Release")
+set(CMAKE_BUILD_TYPE "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
    message(STATUS "Setting build type to '${DEFAULT_BUILD}' as none was specified.")
    set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD} CACHE STRING "Choose the type of build." FORCE)
