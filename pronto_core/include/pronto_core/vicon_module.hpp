@@ -3,13 +3,13 @@
 #include "pronto_core/definitions.hpp"
 namespace pronto {
 
-enum class ViconMode {MODE_POSITION,
+enum class MocapMode {MODE_POSITION,
                       MODE_POSITION_ORIENT,
                       MODE_ORIENTATION, MODE_YAW};
 
-struct ViconConfig{
+struct MocapConfig{
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    ViconMode mode;
+    MocapMode mode;
     Transform body_to_vicon = Transform::Identity();
     /**
      * @brief r_vicon_xyz standard deviation for position in meters
@@ -21,7 +21,7 @@ struct ViconConfig{
     double r_vicon_chi;
 };
 
-class ViconModule : public SensingModule<RigidTransform> {
+class MocapModule : public SensingModule<RigidTransform> {
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 public:
@@ -31,7 +31,7 @@ public:
     using IndexVector = Eigen::Matrix<int, Eigen::Dynamic, 1, 0, 6, 1>;
     using CovMatrix = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, 0, 6 ,6>;
 public:
-    ViconModule(const ViconConfig& cfg);
+    MocapModule(const MocapConfig& cfg);
 
     RBISUpdateInterface* processMessage(const RigidTransform *msg,
                                         StateEstimator *est) override;
@@ -42,9 +42,9 @@ public:
                             const RBIM &default_cov,
                             RBIS &init_state, RBIM &init_cov) override;
 protected:
-    ViconMode mode;
+    MocapMode mode;
     Transform body_to_vicon = Transform::Identity();
-    Transform local_to_vicon;
+    Transform local_to_mocap;
     Transform local_to_body;
 
     IndexVector z_indices;

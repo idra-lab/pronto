@@ -42,6 +42,9 @@ void poseMeasurementFromROS(const nav_msgs::Odometry& ros_msg,
 void rigidTransformFromROS(const geometry_msgs::TransformStamped& msg,
                            RigidTransform& transf);
 
+void rigidTransformFromROS(const geometry_msgs::PoseStamped& msg,
+                           RigidTransform& transf);
+
 void jointStateFromROS(const sensor_msgs::JointState& ros_msg,
                        JointState& msg);
 

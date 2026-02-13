@@ -8,33 +8,35 @@ ViconHandlerROS::ViconHandlerROS(ros::NodeHandle &nh) :
 nh_(nh)
 {
     std::string prefix = "vicon/";
-    ViconConfig cfg;
+    MocapConfig cfg;
     std::string mode_str;
     nh_.getParam(prefix + "mode", mode_str);
     if (mode_str.compare("position") == 0) {
-      cfg.mode = ViconMode::MODE_POSITION;
+      cfg.mode = MocapMode::MODE_POSITION;
       std::cout << "Vicon will provide position measurements." << std::endl;
     }
     else if (mode_str.compare("position_orient") == 0) {
-      cfg.mode = ViconMode::MODE_POSITION_ORIENT;
+      cfg.mode = MocapMode::MODE_POSITION_ORIENT;
       std::cout << "Vicon will provide position and orientation measurements." << std::endl;
     }
     else if (mode_str.compare("orientation") == 0) {
-      cfg.mode = ViconMode::MODE_ORIENTATION;
+      cfg.mode = MocapMode::MODE_ORIENTATION;
       std::cout << "Vicon will provide orientation measurements." << std::endl;
     }
     else if (mode_str.compare("yaw") == 0) {
-      cfg.mode = ViconMode::MODE_YAW;
+      cfg.mode = MocapMode::MODE_YAW;
       std::cout << "Vicon will provide yaw orientation measurements." << std::endl;
     }
     else {
-      cfg.mode = ViconMode::MODE_POSITION;
+      cfg.mode = MocapMode::MODE_POSITION;
       std::cout << "Unrecognized Vicon mode. Using position mode by default." << std::endl;
     }
 
     bool apply_frame = false;
     std::string frame_from;
     std::string frame_to;
+    std::vector<double> body_to_mocap_t;
+    std::vector<double> body_to_mocap_rpy;
     if(nh_.getParam(prefix + "apply_frame", apply_frame) && apply_frame){
         if(nh_.getParam(prefix + "frame_from", frame_from)){
             if(nh_.getParam(prefix + "frame_to", frame_to)){
@@ -49,6 +51,17 @@ nh_(nh)
                 }
 
             }
+        } else if(nh_.getParam(prefix + "body_to_mocap_translation", body_to_mocap_t) &&
+                   nh_.getParam(prefix + "body_to_mocap_rotation_rpy", body_to_mocap_rpy)){
+            const Eigen::AngleAxisd Rx(body_to_mocap_rpy[0]*M_PI/180.0, Eigen::Vector3d::UnitX());
+            const Eigen::AngleAxisd Ry(body_to_mocap_rpy[1]*M_PI/180.0, Eigen::Vector3d::UnitY());
+            const Eigen::AngleAxisd Rz(body_to_mocap_rpy[2]*M_PI/180.0, Eigen::Vector3d::UnitZ());
+            Eigen::Quaterniond q = Rz * Ry * Rx; // yaw-pitch-roll
+            Eigen::Vector3d t(body_to_mocap_t[0],body_to_mocap_t[1],body_to_mocap_t[2]);
+            q.normalize();
+
+            cfg.body_to_vicon = Eigen::Isometry3d().fromPositionOrientationScale(t, q, Eigen::Vector3d::Ones());
+
         }
 
     } else {
@@ -64,17 +77,17 @@ nh_(nh)
         cfg.r_vicon_chi = 0;
         ROS_WARN("Couldn't get param \"r_chi\". Setting to zero.");
     }
-    vicon_module_.reset(new ViconModule(cfg));
+    vicon_module_ = std::make_unique<MocapModule>(cfg);
 }
 
-RBISUpdateInterface* ViconHandlerROS::processMessage(const geometry_msgs::TransformStamped *msg,
+RBISUpdateInterface* ViconHandlerROS::processMessage(const geometry_msgs::PoseStamped *msg,
                                                      StateEstimator *est)
 {
     rigidTransformFromROS(*msg, vicon_transf_);
     return vicon_module_->processMessage(&vicon_transf_,est);
 }
 
-bool ViconHandlerROS::processMessageInit(const geometry_msgs::TransformStamped *msg,
+bool ViconHandlerROS::processMessageInit(const geometry_msgs::PoseStamped *msg,
                                          const std::map<std::string, bool> &sensor_initialized,
                                          const RBIS &default_state,
                                          const RBIM &default_cov,

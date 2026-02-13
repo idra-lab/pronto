@@ -6,14 +6,14 @@
 
 namespace pronto {
 
-class ViconHandlerROS : public SensingModule<geometry_msgs::TransformStamped> {
+class ViconHandlerROS : public SensingModule<geometry_msgs::PoseStamped> {
 public:
     ViconHandlerROS(ros::NodeHandle& nh);
 
-    RBISUpdateInterface* processMessage(const geometry_msgs::TransformStamped *msg,
+    RBISUpdateInterface* processMessage(const geometry_msgs::PoseStamped *msg,
                                         StateEstimator *est);
 
-    bool processMessageInit(const geometry_msgs::TransformStamped *msg,
+    bool processMessageInit(const geometry_msgs::PoseStamped *msg,
                             const std::map<std::string, bool> &sensor_initialized,
                             const RBIS &default_state,
                             const RBIM &default_cov,
@@ -23,7 +23,7 @@ public:
 
 private:
     ros::NodeHandle& nh_;
-    std::shared_ptr<ViconModule> vicon_module_;
+    std::unique_ptr<MocapModule> vicon_module_;
     RigidTransform vicon_transf_;
 };
 

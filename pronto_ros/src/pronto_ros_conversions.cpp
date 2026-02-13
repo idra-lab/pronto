@@ -120,14 +120,16 @@ void poseMeasurementFromROS(const nav_msgs::Odometry &ros_msg,
   tf::quaternionTFToEigen(tf_q, msg.orientation);
 }
 
-void poseMeasurementFromROS(const geometry_msgs::Pose& ros_msg,
-                            PoseMeasurement &msg) {
-
+void rigidTransformFromROS(const geometry_msgs::PoseStamped& msg,
+                        RigidTransform &transf) {
+  tf::Transform temp_tf_transf_;
+  tf::poseMsgToTF(msg.pose, temp_tf_transf_); // Pose in tf is a Transform
+  tf::transformTFToEigen(temp_tf_transf_, transf.transform);
+  transf.utime = msg.header.stamp.toNSec() / 1000;
 }
 
 void rigidTransformFromROS(const geometry_msgs::TransformStamped &msg,
-                           RigidTransform &transf)
-{
+                           RigidTransform &transf) {
   tf::Transform temp_tf_transf_;
   tf::transformMsgToTF(msg.transform, temp_tf_transf_);
   tf::transformTFToEigen(temp_tf_transf_, transf.transform);
