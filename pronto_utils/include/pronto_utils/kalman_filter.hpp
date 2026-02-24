@@ -7,7 +7,7 @@
 #include <Eigen/StdVector>
 #include <Eigen/Core>
 
-namespace EstimateTools {
+namespace pronto_utils {
   
 class KalmanFilter{
   public:

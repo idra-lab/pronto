@@ -17,7 +17,7 @@ using namespace Eigen;
 using namespace std;
 
 
-namespace EstimateTools {
+namespace pronto_utils {
   
 KalmanFilter::KalmanFilter(int nq_, double process_noise_ , double observation_noise_ ): 
      nq_(nq_), process_noise_(process_noise_), observation_noise_(observation_noise_){

@@ -1,32 +1,43 @@
 #ifndef __ALPHA_FILTER_HPP__
 #define __ALPHA_FILTER_HPP__
 
-#include <iostream>
-#include <inttypes.h>
 #include <Eigen/Dense>
-#include <Eigen/StdVector>
-#include <Eigen/Core>
 
-namespace EstimateTools {
+namespace pronto_utils {
 
-class AlphaFilter{
-  public:
-    AlphaFilter(double alpha_= 0.0);
+template <class T>
+class AlphaFilter {
+ public:
+  AlphaFilter(double alpha_ = 0.0);
 
-    ~AlphaFilter(){
-    }
+  ~AlphaFilter() {}
 
-    void processSample(Eigen::VectorXd& x, Eigen::VectorXd &x_filtered);
+  void processSample(const T& x, T& x_filtered);
+  /**
+   * @brief processSample
+   * @param x [in/out] calculation in place of the new value
+   */
+  void processSample(T &x);
 
-  private:
-    double alpha_;
+  T getFilteredPrev() {
+      return  x_filtered_prev_;
+  }
 
-    bool init_;
-    bool verbose_;
+  bool isInit(){
+      return init_;
+  }
 
-    Eigen::VectorXd x_filtered_prev_;
+ private:
+  double alpha_;
+  bool init_ = false;
+  T x_filtered_prev_;
 };
 
-}
+// Tell other translation units: "don't instantiate these here"
+extern template class AlphaFilter<double>;
+extern template class AlphaFilter<Eigen::Vector3d>;
+extern template class AlphaFilter<Eigen::VectorXd>;
+
+}  // namespace pronto_utils
 
 #endif

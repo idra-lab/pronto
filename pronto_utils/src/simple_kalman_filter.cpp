@@ -7,7 +7,7 @@
 using namespace Eigen;
 using namespace std;
 
-namespace EstimateTools {
+namespace pronto_utils {
 
 SimpleKalmanFilter::SimpleKalmanFilter(double process_noise_pos_ ,double process_noise_vel_ , double observation_noise_ ):
      process_noise_pos_(process_noise_pos_), process_noise_vel_(process_noise_vel_), observation_noise_(observation_noise_){
