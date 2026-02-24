@@ -17,25 +17,15 @@ void AlphaFilter<T>::processSample(const T& x, T& x_filtered) {
     init_ = true;
     return;
   }
-
+  //std::cerr << "x_filtered = " << alpha_ << " * " << x_filtered_prev_ << " + (1.0 - " << alpha_
+  //          << ") * " << x << " = " << x_filtered << endl;
   x_filtered = alpha_ * x_filtered_prev_ + (1.0 - alpha_) * x;
   x_filtered_prev_ = x_filtered;
 }
 
 template <class T>
 void AlphaFilter<T>::processSample(T& x){
-
-    if (!init_) {
-        T x_filtered = x;
-        x_filtered_prev_ = x_filtered;
-        init_ = true;
-        return;
-    }
-
-    T x_filtered = alpha_ * x_filtered_prev_ + (1.0 - alpha_) * x;
-    std::cerr << "x_filtered = " << alpha_ << " * " << x_filtered_prev_ << " + (1.0 - " << alpha_ << ") * " << x << " = " << x_filtered << endl;
-    x_filtered_prev_ = x_filtered;
-    x = x_filtered;
+    processSample(x, x);
 }
 
 template class AlphaFilter<double>;
