@@ -8,14 +8,14 @@
 using namespace Eigen;
 using namespace std;
 
-namespace EstimateTools {
+namespace pronto_utils {
 
 BacklashFilter::BacklashFilter(double process_noise_pos_ ,double process_noise_vel_ , double observation_noise_ ):
      process_noise_pos_(process_noise_pos_), process_noise_vel_(process_noise_vel_), observation_noise_(observation_noise_){
   init_ = false;
   verbose_ = false;
 
-  simple_kf_ = new EstimateTools::SimpleKalmanFilter (process_noise_pos_, process_noise_vel_, observation_noise_);
+  simple_kf_ = std::make_unique<pronto_utils::SimpleKalmanFilter>(process_noise_pos_, process_noise_vel_, observation_noise_);
   
   // Default Parameters:
   alpha_ =0.5;// 0.9042; // Sylvian: "computed to get a 16Hz break freq", value from Scott

@@ -7,8 +7,9 @@
 #include <Eigen/StdVector>
 #include <Eigen/Core>
 #include "pronto_utils/simple_kalman_filter.hpp" // Eigen::Vector2f KF
+#include <memory>
 
-namespace EstimateTools {
+namespace pronto_utils {
 
 class BacklashFilter{
   public:
@@ -25,7 +26,7 @@ class BacklashFilter{
 
   private:
     
-    EstimateTools::SimpleKalmanFilter* simple_kf_;
+    std::unique_ptr<pronto_utils::SimpleKalmanFilter> simple_kf_;
     float process_noise_pos_, process_noise_vel_;
     float observation_noise_;
 
