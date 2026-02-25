@@ -80,7 +80,7 @@ LegEstimator::LegEstimator(BipedForwardKinematics& fk, const LegOdometerConfig& 
     double joint_process_noise  = 0;//bot_param_get_double_or_fail(botparam_, "state_estimator.legodo.joint_process_noise"); // 0.01;
     double joint_observation_noise   = 0;//bot_param_get_double_or_fail(botparam_, "state_estimator.legodo.joint_observation_noise"); // 5E-4;
     for (size_t i=0;i < NUM_FILT_JOINTS; i++){
-      EstimateTools::SimpleKalmanFilter* a_filter = new EstimateTools::SimpleKalmanFilter (joint_process_noise, joint_observation_noise); // uses Eigen2d
+      pronto_utils::SimpleKalmanFilter* a_filter = new pronto_utils::SimpleKalmanFilter (joint_process_noise, joint_observation_noise); // uses Eigen2d
       joint_kf_.push_back(a_filter);
     }
   }else{

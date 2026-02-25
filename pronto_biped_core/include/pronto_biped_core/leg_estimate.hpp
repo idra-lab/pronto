@@ -116,7 +116,7 @@ private:
   private:
     // joint position filters, optionally used
     std::vector<LowPassFilter*> lpfilter_; // previously were not pointers
-    std::vector<EstimateTools::SimpleKalmanFilter*> joint_kf_;
+    std::vector<pronto_utils::SimpleKalmanFilter*> joint_kf_;
 
     /// Parameters
     int verbose_;
